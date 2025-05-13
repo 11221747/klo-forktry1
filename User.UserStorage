@@ -1,0 +1,61 @@
+package User;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
+public class UserStorage {
+    // 注册用户（用户名作为文件名）
+    public static void registerUser(String username, String password) throws Exception {
+        // 创建存储目录（如果不存在）
+        File dir = new File("userData/");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        // 用户名作为文件名（如 "user_data/alice.txt"）
+        File userFile = new File("userData/"+ username + ".txt");
+
+        // 检查用户名是否已存在
+        if (userFile.exists()) {
+            throw new Exception("用户名已存在！");
+        }
+
+        // 写入密码到文件
+        try (FileWriter writer = new FileWriter(userFile)) {
+            writer.write(password); // 只存密码
+        }
+    }
+
+    // 验证登录（检查用户名和密码是否匹配）
+    public static boolean login(String username, String password) throws IOException {
+        File userFile = new File("userData/" + username + ".txt");
+        if (!userFile.exists()) {
+            System.out.println("用户名不存在！");
+            return false;
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
+            String storedPassword = reader.readLine();
+            return storedPassword.equals(password);
+        }
+    }
+
+
+
+
+    // 测试
+    public static void main(String[] args) {
+        try {
+            // 注册用户
+            registerUser("alice", "123");
+            registerUser("bob", "456");
+
+            // 测试登录
+            login("alice", "123");  // 正常登录（无异常）
+            login("alice", "wrong"); // 抛出异常：密码错误！
+            login("charlie", "123"); // 抛出异常：用户名不存在！
+        } catch (Exception e) {
+            System.out.println("操作失败: " + e.getMessage()); // 捕获并打印异常
+        }
+    }
+}
