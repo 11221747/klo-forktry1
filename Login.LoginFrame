@@ -75,8 +75,7 @@ public class LoginFrame extends JFrame {
                 /// ////////两个信息都保存了
                 JOptionPane.showMessageDialog(null,"注册成功，请重新登录！","成功登录窗口",JOptionPane.INFORMATION_MESSAGE // 消息类型（显示信息图标）
                 );
-                username.setText("");
-                password.setText("");
+        
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
